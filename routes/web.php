@@ -31,3 +31,46 @@ Route::get('/clientes', function () {
 
         echo "<hr>";
 });
+
+Route::get('/inserir', function () {
+    $cli = new Cliente();
+    $cli->nome = "Jose Almeida";
+    $cli->telefone = "11 98154-5645";
+    $cli->save();
+    $end = new Endereco();
+    $end->rua = "Av. do Estado";
+    $end->numero = 400;
+    $end->bairro = "Centro";
+    $end->cidade = "Sao Paulo";
+    $end->uf = "SP";
+    $end->cep = "13010-654";
+    $cli->endereco()->save($end);
+
+    $cli = new Cliente();
+    $cli->nome = "Marcos Silva";
+    $cli->telefone = "22 98444-2222";
+    $cli->save();
+    $end = new Endereco();
+    $end->rua = "Av. Brasil";
+    $end->numero = 100;
+    $end->bairro = "Jardim Olivia";
+    $end->cidade = "Sao Paulo";
+    $end->uf = "SP";
+    $end->cep = "13222-222";
+    $cli->endereco()->save($end);
+
+    return "OK";
+});
+
+
+Route::get('/clientes/json', function () {
+    // $clientes = Cliente::all();
+    $clientes = Cliente::with(['endereco'])->get();
+    return $clientes->toJson();
+});
+
+
+Route::get('/enderecos/json', function () {
+    $enderecos = Endereco::with(['cliente'])->get();
+    return $enderecos->toJson();
+});
